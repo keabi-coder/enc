@@ -6,26 +6,29 @@
     <title>Easy Text Hider & Finder</title>
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --background: #f8fafc;
+            --primary: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            --primary-hover: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+            --background: #f1f5f9;
             --surface: #ffffff;
             --text: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --radius: 16px;
-            --radius-sm: 8px;
+            --border-hover: #cbd5e1;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
             --error: #ef4444;
             --success: #10b981;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --transition: all 0.2s ease-in-out;
+            --shadow-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 12px 30px -10px rgba(15, 23, 42, 0.08);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -36,53 +39,54 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 16px;
+            padding: clamp(12px, 4vw, 32px);
         }
 
         .container {
             background: var(--surface);
-            padding: 24px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            padding: clamp(20px, 5vw, 40px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
             width: 100%;
-            max-width: 550px;
-            border: 1px solid var(--border);
-        }
-
-        @media (min-width: 640px) {
-            .container { padding: 32px; }
+            max-width: 600px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 24px;
+            font-size: clamp(1.4rem, 4vw, 1.75rem);
+            font-weight: 800;
+            margin-bottom: 28px;
             text-align: center;
             color: var(--text);
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
+            background: var(--primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
         label {
             font-size: 0.875rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text);
+            letter-spacing: -0.01em;
+            padding-left: 2px;
         }
 
-        /* Responsive Accessible Radio Grid Toggle */
+        /* Modern Segmented Controls */
         .radio-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            background: var(--background);
+            gap: 6px;
+            background: #f8fafc;
             padding: 6px;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             border: 1px solid var(--border);
         }
 
@@ -101,12 +105,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 44px; /* Tap Target friendly */
-            padding: 8px 12px;
+            min-height: 48px;
+            padding: 10px clamp(12px, 3vw, 20px);
             background: transparent;
             cursor: pointer;
-            border-radius: calc(var(--radius-sm) - 2px);
-            font-weight: 500;
+            border-radius: calc(var(--radius-md) - 4px);
+            font-size: 0.95rem;
+            font-weight: 600;
             color: var(--text-muted);
             margin-bottom: 0;
             transition: var(--transition);
@@ -116,27 +121,28 @@
 
         .radio-option input[type="radio"]:checked + label {
             background: var(--surface);
-            color: var(--primary);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            font-weight: 600;
+            color: #4f46e5;
+            box-shadow: var(--shadow-sm), 0 4px 12px -1px rgba(79, 70, 229, 0.1);
         }
 
-        /* Form Inputs Optimized to prevent iOS zoom-on-focus (Must be at least 16px) */
-        input[type="password"], textarea {
+        /* Ultra Premium Inputs & Textareas */
+        input[type="password"] {
             width: 100%;
-            padding: 12px 16px;
+            height: 52px;
+            padding: 0 18px;
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
-            font-size: 16px; 
+            font-size: 16px;
             background-color: var(--surface);
             color: var(--text);
             outline: none;
             transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
 
-        input[type="password"]:focus, textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+        input[type="password"]:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
         }
 
         .textarea-wrapper {
@@ -145,50 +151,81 @@
         }
 
         textarea {
+            width: 100%;
             resize: vertical;
-            min-height: 140px;
-            padding-bottom: 52px;
+            min-height: clamp(140px, 25vh, 220px);
+            padding: clamp(14px, 3vw, 20px);
+            padding-bottom: 60px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: var(--surface);
+            color: var(--text);
+            outline: none;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Action Toolbar inside Inputs */
+        textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+        }
+
+        #outputText {
+            background: #f8fafc;
+            border-style: dashed;
+            font-family: "SF Mono", SFMono-Regular, Consolas, monospace;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        /* Beautiful floating input bar */
         .input-toolbar {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
+            bottom: 14px;
+            right: 14px;
             display: flex;
-            gap: 6px;
+            gap: 8px;
             z-index: 5;
         }
 
         .util-btn {
-            background: var(--surface);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
             border: 1px solid var(--border);
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
             cursor: pointer;
             color: var(--text-muted);
             transition: var(--transition);
-            min-height: 32px;
+            min-height: 36px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             user-select: none;
+            box-shadow: var(--shadow-sm);
         }
 
-        .util-btn:hover, .util-btn:active {
-            background: var(--background);
+        .util-btn:hover {
+            border-color: var(--border-hover);
             color: var(--text);
+            transform: translateY(-1px);
         }
 
-        /* Strength Meter Indicator */
+        .util-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Fluid Strength Indicator */
         .strength-meter {
-            height: 4px;
+            height: 6px;
             width: 100%;
             background: var(--border);
-            border-radius: 2px;
+            border-radius: 100px;
             overflow: hidden;
             margin-top: -4px;
         }
@@ -197,53 +234,57 @@
             height: 100%;
             width: 0%;
             background: var(--error);
+            border-radius: 100px;
             transition: var(--transition);
         }
 
-        /* Core Action Button */
+        /* Vibrant Primary Button */
         button[type="button"].action-btn {
             width: 100%;
-            background-color: var(--primary);
+            background: var(--primary);
             color: white;
-            min-height: 48px;
-            padding: 12px;
+            min-height: 54px;
+            padding: 14px;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
-            margin-top: 8px;
+            margin-top: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             user-select: none;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
         }
 
         button[type="button"].action-btn:hover {
-            background-color: var(--primary-hover);
+            background: var(--primary-hover);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
         }
         
         button[type="button"].action-btn:active {
-            transform: scale(0.99);
+            transform: scale(0.98);
         }
 
-        /* Status Panels */
+        /* Error/Status Alerts */
         .status-banner {
-            padding: 14px 16px;
-            border-radius: var(--radius-sm);
+            padding: 16px;
+            border-radius: var(--radius-md);
             font-size: 0.9rem;
-            font-weight: 500;
-            margin-top: 12px;
+            font-weight: 600;
+            margin-top: 16px;
             display: none;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .status-banner.error {
             display: block;
             background: #fef2f2;
             color: var(--error);
-            border: 1px solid #fca5a5;
+            border: 1px solid #fee2e2;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.05);
         }
     </style>
 </head>
@@ -252,7 +293,6 @@
     <div class="container">
         <h1 id="appTitle">Text Hider & Finder</h1>
 
-        <!-- Language Switcher -->
         <div class="form-group">
             <label id="langLabel">Choose Language / ቋንቋ ይምረጡ</label>
             <div class="radio-group">
@@ -267,7 +307,6 @@
             </div>
         </div>
 
-        <!-- Op Switch -->
         <div class="form-group">
             <label id="opLabel">What do you want to do?</label>
             <div class="radio-group">
@@ -282,14 +321,12 @@
             </div>
         </div>
 
-        <!-- Key Block -->
         <div class="form-group">
             <label for="secretKey" id="keyLabel">Lock Code / Password</label>
             <input type="password" id="secretKey" placeholder="Create a secret code to lock/unlock..." required>
             <div class="strength-meter"><div class="strength-bar" id="strengthBar"></div></div>
         </div>
 
-        <!-- Working Input Area -->
         <div class="form-group">
             <label id="textLabel" for="mainText">Your Message</label>
             <div class="textarea-wrapper">
@@ -301,11 +338,10 @@
             </div>
         </div>
 
-        <!-- Output Container Panel -->
         <div class="form-group" id="outputGroup" style="display: none; margin-top: 24px;">
             <label for="outputText" id="resultLabel">Result</label>
             <div class="textarea-wrapper">
-                <textarea id="outputText" readonly style="background: var(--background); min-height: 120px; font-family: monospace;"></textarea>
+                <textarea id="outputText" readonly></textarea>
                 <div class="input-toolbar">
                     <button type="button" class="util-btn" id="copyBtn">Copy</button>
                 </div>
@@ -317,7 +353,6 @@
     </div>
 
     <script>
-        // Simplified Cross-Platform Language Dictionary
         const i18n = {
             en: {
                 title: "Text Hider & Finder",
@@ -356,10 +391,10 @@
                 placeholderDecrypt: "የተዘበራረቀውን የተደበቀ ጽሑፍ እዚህ ያስገቡ...",
                 btnEncrypt: "ጽሑፉን ደብቅ",
                 btnDecrypt: "ጽሑፉን መልስ",
-                clearBtn: "Clear",
-                pasteBtn: "Paste",
-                copyBtn: "Copy",
-                copiedBtn: "Copied!",
+                clearBtn: "አጽዳ",
+                pasteBtn: "ለጥፍ",
+                copyBtn: "ቅዳ",
+                copiedBtn: "ተቀድቷል!",
                 resultLabel: "ውጤት",
                 errRequired: "እባክዎ መልዕክት እና ሚስጥራዊ መቆለፊያ ኮድ ያስገቡ።",
                 errEncryptFail: "ጽሑፉን መደበቅ አልተቻለም። እንደገና ይሞክሩ።",
@@ -433,7 +468,6 @@
         modeEncrypt.addEventListener('change', updateUI);
         modeDecrypt.addEventListener('change', updateUI);
 
-        // Code Security Indicator metrics logic
         secretKey.addEventListener('input', () => {
             const val = secretKey.value;
             let score = 0;
@@ -455,10 +489,8 @@
             mainText.focus();
         });
 
-        // Universal Clipboard Copy Solution (Works everywhere including iOS/Android Webviews)
         copyBtn.addEventListener('click', () => {
             if (!outputText.value) return;
-            
             const textToCopy = outputText.value;
             const lang = getSelectedLang();
 
@@ -473,12 +505,12 @@
 
         function fallbackCopy(element, lang) {
             element.select();
-            element.setSelectionRange(0, 99999); // Mobile compatibility constraint
+            element.setSelectionRange(0, 99999);
             try {
                 document.execCommand('copy');
                 showCopiedFeedback(lang);
             } catch (err) {
-                console.error('Fallback fallback copy failed', err);
+                console.error(err);
             }
         }
 
@@ -487,23 +519,19 @@
             setTimeout(() => copyBtn.textContent = i18n[lang].copyBtn, 2000);
         }
 
-        // Universal Clipboard Paste Solution
         pasteBtn.addEventListener('click', async () => {
             try {
                 if (navigator.clipboard && navigator.clipboard.readText) {
                     const text = await navigator.clipboard.readText();
-                    if(text) {
-                        mainText.value = text;
-                    }
+                    if(text) mainText.value = text;
                 } else {
-                    alert("To paste on this browser/device, tap inside the text area directly and use your device's pop-up paste action menu.");
+                    alert("Tap inside the box directly and use your device menu to paste.");
                 }
             } catch (err) {
-                alert("Please tap inside the text box directly and use your device's built-in paste button due to security restrictions.");
+                alert("Tap inside the box directly and use your device menu to paste.");
             }
         });
 
-        // Subtle Crypto Engine Logic
         async function deriveKey(password, salt) {
             const encoder = new TextEncoder();
             const baseKey = await window.crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]);
@@ -562,7 +590,6 @@
                 outputText.value = result;
                 outputGroup.style.display = 'block';
                 
-                // Smart scroll layout calculation for smaller handheld items
                 setTimeout(() => {
                     outputGroup.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 100);
@@ -576,7 +603,6 @@
             }
         });
 
-        // Initialize Native Screen Framework
         updateUI();
     </script>
 </body>
