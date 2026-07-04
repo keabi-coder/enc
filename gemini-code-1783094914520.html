@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Text Encryptor & Decryptor</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--surface);
+            padding: 32px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 560px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-align: center;
+            color: var(--text);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        /* Modern Radio Group Toggle */
+        .radio-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            background: var(--background);
+            padding: 6px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .radio-option {
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .radio-option label {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 0;
+            transition: all 0.2s ease;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: var(--surface);
+            color: var(--primary);
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            font-weight: 600;
+        }
+
+        /* Inputs & Textareas */
+        input[type="password"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: var(--surface);
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="password"]:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Action Button */
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Error Text */
+        .error-message {
+            color: #dc2626;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Text Cipher</h1>
+
+        <div class="form-group">
+            <label>Select Operation</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="modeEncrypt" name="operation" value="encrypt" checked>
+                    <label for="modeEncrypt">Encrypt</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="modeDecrypt" name="operation" value="decrypt">
+                    <label for="modeDecrypt">Decrypt</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="secretKey">Secret Key / Password</label>
+            <input type="password" id="secretKey" placeholder="Enter a secure key..." required>
+        </div>
+
+        <div class="form-group">
+            <label id="textLabel" for="mainText">Text to Encrypt</label>
+            <textarea id="mainText" placeholder="Type or paste your text here..."></textarea>
+            <div id="errorBox" class="error-message"></div>
+        </div>
+
+        <button id="actionBtn" type="button">Encrypt Text</button>
+    </div>
+
+    <script>
+        const modeEncrypt = document.getElementById('modeEncrypt');
+        const modeDecrypt = document.getElementById('modeDecrypt');
+        const textLabel = document.getElementById('textLabel');
+        const mainText = document.getElementById('mainText');
+        const secretKey = document.getElementById('secretKey');
+        const actionBtn = document.getElementById('actionBtn');
+        const errorBox = document.getElementById('errorBox');
+
+        // Dynamically update UI based on selected mode
+        function updateUI() {
+            errorBox.style.display = 'none';
+            if (modeEncrypt.checked) {
+                textLabel.textContent = "Text to Encrypt";
+                mainText.placeholder = "Type or paste the plain text here...";
+                actionBtn.textContent = "Encrypt Text";
+            } else {
+                textLabel.textContent = "Text to Decrypt";
+                mainText.placeholder = "Paste the encrypted base64 text here...";
+                actionBtn.textContent = "Decrypt Text";
+            }
+        }
+
+        modeEncrypt.addEventListener('change', updateUI);
+        modeDecrypt.addEventListener('change', updateUI);
+
+        // Helper: Derive a secure key using PBKDF2
+        async function deriveKey(password, salt) {
+            const encoder = new TextEncoder();
+            const baseKey = await window.crypto.subtle.importKey(
+                "raw", 
+                encoder.encode(password), 
+                "PBKDF2", 
+                false, 
+                ["deriveKey"]
+            );
+            return window.crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt: salt,
+                    iterations: 100000,
+                    hash: "SHA-256"
+                },
+                baseKey,
+                { name: "AES-GCM", length: 256 },
+                false,
+                ["encrypt", "decrypt"]
+            );
+        }
+
+        // Encryption logic
+        async function encryptText(text, password) {
+            const encoder = new TextEncoder();
+            const salt = window.crypto.getRandomValues(new Uint8Array(16));
+            const iv = window.crypto.getRandomValues(new Uint8Array(12));
+            const key = await deriveKey(password, salt);
+
+            const encrypted = await window.crypto.subtle.encrypt(
+                { name: "AES-GCM", iv: iv },
+                key,
+                encoder.encode(text)
+            );
+
+            // Package salt, iv, and encrypted data into a single array
+            const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
+            combined.set(salt, 0);
+            combined.set(iv, salt.length);
+            combined.set(new Uint8Array(encrypted), salt.length + iv.length);
+
+            // Convert to base64 string for easy copying
+            return btoa(String.fromCharCode.apply(null, combined));
+        }
+
+        // Decryption logic
+        async function decryptText(base64Data, password) {
+            const decoder = new TextDecoder();
+            const combined = new Uint8Array(atob(base64Data).split("").map(c => c.charCodeAt(0)));
+            
+            const salt = combined.slice(0, 16);
+            const iv = combined.slice(16, 28);
+            const encrypted = combined.slice(28);
+
+            const key = await deriveKey(password, salt);
+
+            const decrypted = await window.crypto.subtle.decrypt(
+                { name: "AES-GCM", iv: iv },
+                key,
+                encrypted
+            );
+
+            return decoder.decode(decrypted);
+        }
+
+        // Main execution trigger
+        actionBtn.addEventListener('click', async () => {
+            errorBox.style.display = 'none';
+            const textValue = mainText.value.trim();
+            const keyValue = secretKey.value;
+
+            if (!textValue || !keyValue) {
+                errorBox.textContent = "Please fill in both the text and the secret key.";
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            try {
+                if (modeEncrypt.checked) {
+                    const result = await encryptText(textValue, keyValue);
+                    mainText.value = result;
+                } else {
+                    const result = await decryptText(textValue, keyValue);
+                    mainText.value = result;
+                }
+            } catch (e) {
+                errorBox.textContent = modeEncrypt.checked 
+                    ? "Encryption failed." 
+                    : "Decryption failed. Check your key or make sure the cipher text hasn't been altered.";
+                errorBox.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
