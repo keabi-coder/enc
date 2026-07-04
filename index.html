@@ -13,8 +13,12 @@
             --text: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --radius: 12px;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --radius: 16px;
+            --radius-sm: 8px;
+            --error: #ef4444;
+            --success: #10b981;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -40,7 +44,8 @@
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             width: 100%;
-            max-width: 560px;
+            max-width: 600px;
+            border: 1px solid var(--border);
         }
 
         h1 {
@@ -49,17 +54,19 @@
             margin-bottom: 24px;
             text-align: center;
             color: var(--text);
+            letter-spacing: -0.02em;
         }
 
         .form-group {
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         label {
-            display: block;
             font-size: 0.875rem;
             font-weight: 600;
-            margin-bottom: 8px;
             color: var(--text);
         }
 
@@ -67,10 +74,10 @@
         .radio-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 8px;
             background: var(--background);
             padding: 6px;
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             border: 1px solid var(--border);
         }
 
@@ -91,147 +98,349 @@
             padding: 10px;
             background: transparent;
             cursor: pointer;
-            border-radius: 6px;
+            border-radius: calc(var(--radius-sm) - 2px);
             font-weight: 500;
             color: var(--text-muted);
             margin-bottom: 0;
-            transition: all 0.2s ease;
+            transition: var(--transition);
         }
 
         .radio-option input[type="radio"]:checked + label {
             background: var(--surface);
             color: var(--primary);
-            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             font-weight: 600;
         }
 
-        /* Inputs & Textareas */
+        /* Input Controls */
         input[type="password"], textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 16px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             font-size: 0.95rem;
             background-color: var(--surface);
             color: var(--text);
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: var(--transition);
         }
 
         input[type="password"]:focus, textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+        }
+
+        .textarea-wrapper {
+            position: relative;
         }
 
         textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px;
+            padding-bottom: 40px;
         }
 
-        /* Action Button */
-        button {
+        /* Tool Utilities Buttons inside Areas */
+        .util-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition);
+            width: auto;
+            margin-top: 0;
+        }
+
+        .util-btn:hover {
+            background: var(--background);
+            color: var(--text);
+        }
+
+        /* Key Strength Indicator */
+        .strength-meter {
+            height: 4px;
+            width: 100%;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: -4px;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--error);
+            transition: var(--transition);
+        }
+
+        /* Actions */
+        button[type="button"].action-btn {
             width: 100%;
             background-color: var(--primary);
             color: white;
             padding: 14px;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: var(--transition);
             margin-top: 8px;
         }
 
-        button:hover {
+        button[type="button"].action-btn:hover {
             background-color: var(--primary-hover);
+            transform: translateY(-1px);
         }
 
-        /* Error Text */
-        .error-message {
-            color: #dc2626;
-            font-size: 0.85rem;
-            margin-top: 8px;
+        button[type="button"].action-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Status Panels */
+        .status-banner {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 12px;
             display: none;
+        }
+
+        .status-banner.error {
+            display: block;
+            background: #fef2f2;
+            color: var(--error);
+            border: 1px solid #fca5a5;
+        }
+
+        .status-banner.success {
+            display: block;
+            background: #ecfdf5;
+            color: var(--success);
+            border: 1px solid #6ee7b7;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Text Cipher</h1>
+        <h1 id="appTitle">Text Cipher</h1>
 
         <div class="form-group">
-            <label>Select Operation</label>
+            <label id="langLabel">Language / ቋንቋ</label>
             <div class="radio-group">
                 <div class="radio-option">
-                    <input type="radio" id="modeEncrypt" name="operation" value="encrypt" checked>
-                    <label for="modeEncrypt">ዘበራርቀው</label>
+                    <input type="radio" id="langEN" name="language" value="en" checked>
+                    <label for="langEN">English</label>
                 </div>
                 <div class="radio-option">
-                    <input type="radio" id="modeDecrypt" name="operation" value="decrypt">
-                    <label for="modeDecrypt">መልሰው</label>
+                    <input type="radio" id="langAM" name="language" value="am">
+                    <label for="langAM">አማርኛ</label>
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <label for="secretKey">Secret Key / Password</label>
+            <label id="opLabel">Select Operation</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="modeEncrypt" name="operation" value="encrypt" checked>
+                    <label for="modeEncrypt" id="opEncryptLabel">Encrypt</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="modeDecrypt" name="operation" value="decrypt">
+                    <label for="modeDecrypt" id="opDecryptLabel">Decrypt</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="secretKey" id="keyLabel">Secret Key / Password</label>
             <input type="password" id="secretKey" placeholder="Enter a secure key..." required>
+            <div class="strength-meter"><div class="strength-bar" id="strengthBar"></div></div>
         </div>
 
         <div class="form-group">
             <label id="textLabel" for="mainText">Text to Encrypt</label>
-            <textarea id="mainText" placeholder="መዘበራረቅ የፈለጉትን ጽሁፍ ያስገቡ..."></textarea>
-            <div id="errorBox" class="error-message"></div>
+            <div class="textarea-wrapper">
+                <textarea id="mainText" placeholder="Type or paste your text here..."></textarea>
+                <button type="button" class="util-btn" id="clearBtn">Clear</button>
+            </div>
         </div>
 
-        <button id="actionBtn" type="button">ቀይር</button>
+        <div class="form-group" id="outputGroup" style="display: none; margin-top: 24px;">
+            <label for="outputText" id="resultLabel">Result</label>
+            <div class="textarea-wrapper">
+                <textarea id="outputText" readonly style="background: var(--background); min-height: 100px; font-family: monospace;"></textarea>
+                <button type="button" class="util-btn" id="copyBtn">Copy</button>
+            </div>
+        </div>
+
+        <button id="actionBtn" class="action-btn" type="button">Encrypt Text</button>
+        <div id="errorBox" class="status-banner error"></div>
     </div>
 
     <script>
+        // Language Dictionary
+        const i18n = {
+            en: {
+                title: "Text Cipher",
+                langLabel: "Language / ቋንቋ",
+                opLabel: "Select Operation",
+                encryptOpt: "Encrypt",
+                decryptOpt: "Decrypt",
+                keyLabel: "Secret Key / Password",
+                keyPlaceholder: "Enter a secure key...",
+                labelEncrypt: "Text to Encrypt",
+                labelDecrypt: "Text to Decrypt",
+                placeholderEncrypt: "Type or paste your text here...",
+                placeholderDecrypt: "Paste the encrypted base64 text here...",
+                btnEncrypt: "Encrypt Text",
+                btnDecrypt: "Decrypt Text",
+                clearBtn: "Clear",
+                copyBtn: "Copy",
+                copiedBtn: "Copied!",
+                resultLabel: "Result",
+                errRequired: "Please fill in both the text and the secret key.",
+                errEncryptFail: "Encryption failed.",
+                errDecryptFail: "Decryption failed. Check your key or make sure the cipher text hasn't been altered."
+            },
+            am: {
+                title: "የጽሑፍ ማመስጠሪያ",
+                langLabel: "Language / ቋንቋ",
+                opLabel: "ክንውን ይምረጡ",
+                encryptOpt: "ዘበራርቀው",
+                decryptOpt: "መልሰው",
+                keyLabel: "ምስጢራዊ ቁልፍ / የይለፍ ቃል",
+                keyPlaceholder: "ደህንነቱ የተጠበቀ ቁልፍ ያስገቡ...",
+                labelEncrypt: "የሚመሰጠር ጽሑፍ",
+                labelDecrypt: "የሚፈታ ጽሑፍ",
+                placeholderEncrypt: "መዘበራረቅ የፈለጉትን ጽሁፍ ያስገቡ...",
+                placeholderDecrypt: "የተዘበራረቀውን (Base64) ጽሁፍ ያስገቡ...",
+                btnEncrypt: "ዘበራርቅ",
+                btnDecrypt: "መልሰው",
+                clearBtn: "አጽዳ",
+                copyBtn: "ቅዳ",
+                copiedBtn: "ተቀድቷል!",
+                resultLabel: "ውጤት",
+                errRequired: "እባክዎ ጽሑፉን እና ምስጢራዊ ቁልፉን ሁለቱንም ያስገቡ።",
+                errEncryptFail: "ማመስጠር አልተሳካም።",
+                errDecryptFail: "ምስጢሩን መፍታት አልተሳካም። ቁልፍዎን ያረጋግጡ ወይም ጽሑፉ እንዳልተቀየረ ያረጋግጡ።"
+            }
+        };
+
+        const langEN = document.getElementById('langEN');
+        const langAM = document.getElementById('langAM');
         const modeEncrypt = document.getElementById('modeEncrypt');
         const modeDecrypt = document.getElementById('modeDecrypt');
+        
+        // Element bindings
+        const appTitle = document.getElementById('appTitle');
+        const langLabel = document.getElementById('langLabel');
+        const opLabel = document.getElementById('opLabel');
+        const opEncryptLabel = document.getElementById('opEncryptLabel');
+        const opDecryptLabel = document.getElementById('opDecryptLabel');
+        const keyLabel = document.getElementById('keyLabel');
         const textLabel = document.getElementById('textLabel');
+        const resultLabel = document.getElementById('resultLabel');
+        
         const mainText = document.getElementById('mainText');
         const secretKey = document.getElementById('secretKey');
+        const strengthBar = document.getElementById('strengthBar');
         const actionBtn = document.getElementById('actionBtn');
         const errorBox = document.getElementById('errorBox');
+        
+        const outputGroup = document.getElementById('outputGroup');
+        const outputText = document.getElementById('outputText');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyBtn = document.getElementById('copyBtn');
 
-        // Dynamically update UI based on selected mode
+        function getSelectedLang() {
+            return langAM.checked ? 'am' : 'en';
+        }
+
         function updateUI() {
+            const lang = getSelectedLang();
+            const dict = i18n[lang];
+            
+            // Clear result blocks on toggles
             errorBox.style.display = 'none';
+            outputGroup.style.display = 'none';
+            outputText.value = '';
+
+            // Update Static Layout Labels
+            appTitle.textContent = dict.title;
+            langLabel.textContent = dict.langLabel;
+            opLabel.textContent = dict.opLabel;
+            opEncryptLabel.textContent = dict.encryptOpt;
+            opDecryptLabel.textContent = dict.decryptOpt;
+            keyLabel.textContent = dict.keyLabel;
+            secretKey.placeholder = dict.keyPlaceholder;
+            clearBtn.textContent = dict.clearBtn;
+            copyBtn.textContent = dict.copyBtn;
+            resultLabel.textContent = dict.resultLabel;
+
+            // Update Conditional Layout Content
             if (modeEncrypt.checked) {
-                textLabel.textContent = "Text to Encrypt";
-                mainText.placeholder = "መዘበራረክ የፈለጉትን ጽሁፍ ያስገቡ...";
-                actionBtn.textContent = "ዘበራርቅ";
+                textLabel.textContent = dict.labelEncrypt;
+                mainText.placeholder = dict.placeholderEncrypt;
+                actionBtn.textContent = dict.btnEncrypt;
             } else {
-                textLabel.textContent = "Text to Decrypt";
-                mainText.placeholder = "የተዘበራረቀውን ጽሁፍ ያስገቡ ...";
-                actionBtn.textContent = "መልሰው";
+                textLabel.textContent = dict.labelDecrypt;
+                mainText.placeholder = dict.placeholderDecrypt;
+                actionBtn.textContent = dict.btnDecrypt;
             }
         }
 
+        // Attach listeners across all control blocks
+        langEN.addEventListener('change', updateUI);
+        langAM.addEventListener('change', updateUI);
         modeEncrypt.addEventListener('change', updateUI);
         modeDecrypt.addEventListener('change', updateUI);
 
-        // Helper: Derive a secure key using PBKDF2
+        // Key Metrics Indicator
+        secretKey.addEventListener('input', () => {
+            const val = secretKey.value;
+            let score = 0;
+            if (val.length > 0) score += 25;
+            if (val.length > 7) score += 25;
+            if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score += 25;
+            if (/[^A-Za-z0-9]/.test(val)) score += 25;
+            
+            strengthBar.style.width = score + '%';
+            if (score <= 25) strengthBar.style.background = 'var(--error)';
+            else if (score <= 75) strengthBar.style.background = '#f59e0b';
+            else strengthBar.style.background = 'var(--success)';
+        });
+
+        clearBtn.addEventListener('click', () => {
+            mainText.value = '';
+            outputGroup.style.display = 'none';
+            outputText.value = '';
+        });
+
+        copyBtn.addEventListener('click', () => {
+            if (!outputText.value) return;
+            navigator.clipboard.writeText(outputText.value);
+            const lang = getSelectedLang();
+            copyBtn.textContent = i18n[lang].copiedBtn;
+            setTimeout(() => copyBtn.textContent = i18n[lang].copyBtn, 2000);
+        });
+
+        // Crypto Operations
         async function deriveKey(password, salt) {
             const encoder = new TextEncoder();
-            const baseKey = await window.crypto.subtle.importKey(
-                "raw", 
-                encoder.encode(password), 
-                "PBKDF2", 
-                false, 
-                ["deriveKey"]
-            );
+            const baseKey = await window.crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]);
             return window.crypto.subtle.deriveKey(
-                {
-                    name: "PBKDF2",
-                    salt: salt,
-                    iterations: 100000,
-                    hash: "SHA-256"
-                },
+                { name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" },
                 baseKey,
                 { name: "AES-GCM", length: 256 },
                 false,
@@ -239,76 +448,62 @@
             );
         }
 
-        // Encryption logic
         async function encryptText(text, password) {
             const encoder = new TextEncoder();
             const salt = window.crypto.getRandomValues(new Uint8Array(16));
             const iv = window.crypto.getRandomValues(new Uint8Array(12));
             const key = await deriveKey(password, salt);
-
-            const encrypted = await window.crypto.subtle.encrypt(
-                { name: "AES-GCM", iv: iv },
-                key,
-                encoder.encode(text)
-            );
-
-            // Package salt, iv, and encrypted data into a single array
+            const encrypted = await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, encoder.encode(text));
             const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
             combined.set(salt, 0);
             combined.set(iv, salt.length);
             combined.set(new Uint8Array(encrypted), salt.length + iv.length);
-
-            // Convert to base64 string for easy copying
             return btoa(String.fromCharCode.apply(null, combined));
         }
 
-        // Decryption logic
         async function decryptText(base64Data, password) {
             const decoder = new TextDecoder();
             const combined = new Uint8Array(atob(base64Data).split("").map(c => c.charCodeAt(0)));
-            
             const salt = combined.slice(0, 16);
             const iv = combined.slice(16, 28);
             const encrypted = combined.slice(28);
-
             const key = await deriveKey(password, salt);
-
-            const decrypted = await window.crypto.subtle.decrypt(
-                { name: "AES-GCM", iv: iv },
-                key,
-                encrypted
-            );
-
+            const decrypted = await window.crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, encrypted);
             return decoder.decode(decrypted);
         }
 
-        // Main execution trigger
         actionBtn.addEventListener('click', async () => {
             errorBox.style.display = 'none';
             const textValue = mainText.value.trim();
             const keyValue = secretKey.value;
+            const lang = getSelectedLang();
 
             if (!textValue || !keyValue) {
-                errorBox.textContent = "Please fill in both the text and the secret key.";
+                errorBox.textContent = i18n[lang].errRequired;
                 errorBox.style.display = 'block';
                 return;
             }
 
             try {
+                let result = '';
                 if (modeEncrypt.checked) {
-                    const result = await encryptText(textValue, keyValue);
-                    mainText.value = result;
+                    result = await encryptText(textValue, keyValue);
                 } else {
-                    const result = await decryptText(textValue, keyValue);
-                    mainText.value = result;
+                    result = await decryptText(textValue, keyValue);
                 }
+                outputText.value = result;
+                outputGroup.style.display = 'flex';
             } catch (e) {
                 errorBox.textContent = modeEncrypt.checked 
-                    ? "Encryption failed." 
-                    : "Decryption failed. Check your key or make sure the cipher text hasn't been altered.";
+                    ? i18n[lang].errEncryptFail 
+                    : i18n[lang].errDecryptFail;
                 errorBox.style.display = 'block';
+                outputGroup.style.display = 'none';
             }
         });
+
+        // Bootstrap Initial UI
+        updateUI();
     </script>
 </body>
 </html>
