@@ -182,7 +182,7 @@
 
         <div class="form-group">
             <label id="textLabel" for="mainText">Text to Encrypt</label>
-            <textarea id="mainText" placeholder="Type or paste your text here..."></textarea>
+            <textarea id="mainText" placeholder="መዘበራረክ የፈለጉትን ጽሁፍ ያስገቡ..."></textarea>
             <div id="errorBox" class="error-message"></div>
         </div>
 
@@ -203,12 +203,12 @@
             errorBox.style.display = 'none';
             if (modeEncrypt.checked) {
                 textLabel.textContent = "Text to Encrypt";
-                mainText.placeholder = "Type or paste the plain text here...";
-                actionBtn.textContent = "Encrypt Text";
+                mainText.placeholder = "መዘበራረክ የፈለጉትን ጽሁፍ ያስገቡ...";
+                actionBtn.textContent = "ዘበራርቅ";
             } else {
                 textLabel.textContent = "Text to Decrypt";
-                mainText.placeholder = "Paste the encrypted base64 text here...";
-                actionBtn.textContent = "Decrypt Text";
+                mainText.placeholder = "የተዘበራረቀውን ጽሁፍ ያስገቡ ...";
+                actionBtn.textContent = "መልሰው";
             }
         }
 
